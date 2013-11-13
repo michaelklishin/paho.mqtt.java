@@ -91,8 +91,14 @@ public class BasicTest {
   public void testSuccessfulURIValidation() {
     MqttConnectOptions opts = new MqttConnectOptions();
 
-    opts.setServerURIs(new String[]{"tcp://127.0.0.1:1883"});
-    opts.setServerURIs(new String[]{"tcp://127.0.0.1:1883/"});
+   	opts.setServerURIs(new String[]{
+			"tcp://127.0.0.1:1883",
+			"tcp://127.0.0.1:1883/",
+			"mqtt://127.0.0.1:1883",
+			"mqtt://127.0.0.1:1883/",
+			"MQTT://127.0.0.1:1883",
+			"tCp://127.0.0.1:1883/"
+	});
   }
 
   /**

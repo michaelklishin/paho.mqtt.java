@@ -11,6 +11,9 @@
  */
 package org.eclipse.paho.client.mqttv3;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import javax.net.SocketFactory;
 import org.eclipse.paho.client.mqttv3.util.Debug;
@@ -37,6 +40,7 @@ public class MqttConnectOptions {
 	protected static final int URI_TYPE_TCP = 0;
 	protected static final int URI_TYPE_SSL = 1;
 	protected static final int URI_TYPE_LOCAL = 2;
+	protected static List<String> knownTCPSchemes = Arrays.asList("tcp", "mqtt");
 
 	private int keepAliveInterval = KEEP_ALIVE_INTERVAL_DEFAULT;
 	private String willDestination = null;
@@ -433,7 +437,7 @@ public class MqttConnectOptions {
 			if (!(path.equals("") || path.equals("/"))) {
 				throw new IllegalArgumentException(srvURI);
 			}
-			if (vURI.getScheme().equals("tcp")) {
+			if (knownTCPSchemes.contains(vURI.getScheme().toLowerCase())) {
 				return URI_TYPE_TCP;
 			}
 			else if (vURI.getScheme().equals("ssl")) {
