@@ -49,7 +49,7 @@ public class BasicTest {
   private static MqttClientFactoryPaho clientFactory;
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -61,8 +61,7 @@ public class BasicTest {
       serverURI = TestProperties.getServerURI();
       clientFactory = new MqttClientFactoryPaho();
       clientFactory.open();
-    }
-    catch (Exception exception) {
+    } catch (Exception exception) {
       log.log(Level.SEVERE, "caught exception:", exception);
       throw exception;
     }
@@ -81,8 +80,7 @@ public class BasicTest {
         clientFactory.close();
         clientFactory.disconnect();
       }
-    }
-    catch (Exception exception) {
+    } catch (Exception exception) {
       log.log(Level.SEVERE, "caught exception:", exception);
     }
   }
@@ -91,23 +89,35 @@ public class BasicTest {
   public void testSuccessfulURIValidation() {
     MqttConnectOptions opts = new MqttConnectOptions();
 
-   	opts.setServerURIs(new String[]{
-			"tcp://127.0.0.1:1883",
-			"tcp://127.0.0.1:1883/",
-			"mqtt://127.0.0.1:1883",
-			"mqtt://127.0.0.1:1883/",
-			"MQTT://127.0.0.1:1883",
-			"tCp://127.0.0.1:1883/",
-			"ssl://127.0.0.1:8883",
-			"mqtts://127.0.0.1:8883/",
-			"mqtt+ssl://127.0.0.1:8883",
-			"mqtt+TLS://127.0.0.1:8883/",
-			"smQTt://127.0.0.1:8883/"
-	});
+    opts.setServerURIs(new String[]{
+      "tcp://127.0.0.1:1883",
+      "tcp://127.0.0.1:1883/",
+      "mqtt://127.0.0.1:1883",
+      "mqtt://127.0.0.1:1883/",
+      "MQTT://127.0.0.1:1883",
+      "tCp://127.0.0.1:1883/",
+      "ssl://127.0.0.1:8883",
+      "mqtts://127.0.0.1:8883/",
+      "mqtt+ssl://127.0.0.1:8883",
+      "mqtt+TLS://127.0.0.1:8883/",
+      "smQTt://127.0.0.1:8883/",
+      "local://127.0.0.1:1883"
+    });
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testFailingURIValidation() {
+    MqttConnectOptions opts = new MqttConnectOptions();
+
+    opts.setServerURIs(new String[]{
+        "http://127.0.0.1:80",
+        "amqp://127.0.0.1:5672",
+        "stomp://127.0.0.1:61613"
+    });
   }
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @Test
   public void testConnect() throws Exception {
@@ -139,12 +149,10 @@ public class BasicTest {
 
       log.info("Disconnecting...");
       client.disconnect();
-    }
-    catch (MqttException exception) {
+    } catch (MqttException exception) {
       log.log(Level.SEVERE, "caught exception:", exception);
       Assert.fail("Unexpected exception: " + exception);
-    }
-    finally {
+    } finally {
       if (client != null) {
         log.info("Close...");
         client.close();
@@ -153,7 +161,7 @@ public class BasicTest {
   }
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @Test
   public void testHAConnect() throws Exception {
@@ -187,14 +195,12 @@ public class BasicTest {
 
         log.info("Disconnecting...");
         client.disconnect();
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         // logger.info(e.getClass().getName() + ": " + e.getMessage());
         e.printStackTrace();
         throw e;
       }
-    }
-    finally {
+    } finally {
       if (client != null) {
         log.info("Close...");
         client.close();
@@ -203,7 +209,7 @@ public class BasicTest {
   }
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @Test
   public void testPubSub() throws Exception {
@@ -243,8 +249,7 @@ public class BasicTest {
 
       log.info("Disconnecting...");
       client.disconnect();
-    }
-    finally {
+    } finally {
       if (client != null) {
         log.info("Close...");
         client.close();
@@ -253,7 +258,7 @@ public class BasicTest {
   }
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @Test
   public void testMsgProperties() throws Exception {
@@ -288,16 +293,14 @@ public class BasicTest {
     boolean thrown = false;
     try {
       msg.setQos(-1);
-    }
-    catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException iae) {
       thrown = true;
     }
     Assert.assertTrue(thrown);
     thrown = false;
     try {
       msg.setQos(3);
-    }
-    catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException iae) {
       thrown = true;
     }
     Assert.assertTrue(thrown);
@@ -321,7 +324,7 @@ public class BasicTest {
   }
 
   /**
-   * @throws Exception 
+   * @throws Exception
    */
   @Test
   public void testConnOptDefaults() throws Exception {
@@ -365,8 +368,7 @@ public class BasicTest {
         if (messages.size() == 0) {
           try {
             messages.wait(1000);
-          }
-          catch (InterruptedException e) {
+          } catch (InterruptedException e) {
             // empty
           }
         }
@@ -383,16 +385,16 @@ public class BasicTest {
     }
 
     /**
-     * @param token  
+     * @param token
      */
     public void deliveryComplete(IMqttDeliveryToken token) {
       logger2.info("delivery complete");
     }
 
     /**
-     * @param topic  
-     * @param message 
-     * @throws Exception 
+     * @param topic
+     * @param message
+     * @throws Exception
      */
     public void messageArrived(String topic, MqttMessage message) throws Exception {
       logger2.info("message arrived: " + new String(message.getPayload()) + "'");

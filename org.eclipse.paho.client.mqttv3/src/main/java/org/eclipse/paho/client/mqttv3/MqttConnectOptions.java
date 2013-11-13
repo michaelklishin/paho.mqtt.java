@@ -42,6 +42,7 @@ public class MqttConnectOptions {
 	protected static final int URI_TYPE_LOCAL = 2;
 	protected static List<String> knownTCPSchemes = Arrays.asList("tcp", "mqtt");
 	private static List<String> knownTLSSchemes = Arrays.asList("ssl", "tls", "mqtts", "mqtt+ssl", "mqtt+tls", "smqtt");
+	private static List<String> knownLocalSchemes = Arrays.asList("local");
 
 	private int keepAliveInterval = KEEP_ALIVE_INTERVAL_DEFAULT;
 	private String willDestination = null;
@@ -438,13 +439,14 @@ public class MqttConnectOptions {
 			if (!(path.equals("") || path.equals("/"))) {
 				throw new IllegalArgumentException(srvURI);
 			}
-			if (knownTCPSchemes.contains(vURI.getScheme().toLowerCase())) {
+			String scheme = vURI.getScheme().toLowerCase();
+			if (knownTCPSchemes.contains(scheme)) {
 				return URI_TYPE_TCP;
 			}
-			else if (knownTLSSchemes.contains(vURI.getScheme().toLowerCase())) {
+			else if (knownTLSSchemes.contains(scheme)) {
 				return URI_TYPE_SSL;
 			}
-			else if (vURI.getScheme().equals("local")) {
+			else if (knownLocalSchemes.contains(scheme)) {
 				return URI_TYPE_LOCAL;
 			}
 			else {
