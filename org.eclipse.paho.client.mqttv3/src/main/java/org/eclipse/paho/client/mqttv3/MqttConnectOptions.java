@@ -41,6 +41,7 @@ public class MqttConnectOptions {
 	protected static final int URI_TYPE_SSL = 1;
 	protected static final int URI_TYPE_LOCAL = 2;
 	protected static List<String> knownTCPSchemes = Arrays.asList("tcp", "mqtt");
+	private static List<String> knownTLSSchemes = Arrays.asList("ssl", "tls", "mqtts", "mqtt+ssl", "mqtt+tls", "smqtt");
 
 	private int keepAliveInterval = KEEP_ALIVE_INTERVAL_DEFAULT;
 	private String willDestination = null;
@@ -440,7 +441,7 @@ public class MqttConnectOptions {
 			if (knownTCPSchemes.contains(vURI.getScheme().toLowerCase())) {
 				return URI_TYPE_TCP;
 			}
-			else if (vURI.getScheme().equals("ssl")) {
+			else if (knownTLSSchemes.contains(vURI.getScheme().toLowerCase())) {
 				return URI_TYPE_SSL;
 			}
 			else if (vURI.getScheme().equals("local")) {
