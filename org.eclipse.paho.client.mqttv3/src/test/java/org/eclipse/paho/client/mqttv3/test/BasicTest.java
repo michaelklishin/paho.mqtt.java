@@ -87,6 +87,14 @@ public class BasicTest {
     }
   }
 
+  @Test
+  public void testSuccessfulURIValidation() {
+    MqttConnectOptions opts = new MqttConnectOptions();
+
+    opts.setServerURIs(new String[]{"tcp://127.0.0.1:1883"});
+    opts.setServerURIs(new String[]{"tcp://127.0.0.1:1883/"});
+  }
+
   /**
    * @throws Exception 
    */

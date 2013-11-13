@@ -429,7 +429,8 @@ public class MqttConnectOptions {
 	protected static int validateURI(String srvURI) {
 		try {
 			URI vURI = new URI(srvURI);
-			if (!vURI.getPath().equals("")) {
+			String path = vURI.getPath();
+			if (!(path.equals("") || path.equals("/"))) {
 				throw new IllegalArgumentException(srvURI);
 			}
 			if (vURI.getScheme().equals("tcp")) {
