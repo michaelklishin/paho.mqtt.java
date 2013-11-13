@@ -57,3 +57,6 @@ Icon
 # Maven
 log/
 target/
+
+# Test persistence directories
+*1883/
